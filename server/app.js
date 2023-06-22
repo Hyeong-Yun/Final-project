@@ -11,7 +11,7 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan('tiny'));
 
-app.use('/items', itemsRoute);
+app.use('/tweets', itemsRoute);
 
 // Not Found 전달
 app.use((req, res, next) => {
@@ -22,4 +22,4 @@ app.use((error, req, res, next) => {
     console.log(error);
     res.sendStatus(500);
 })
-app.listen(8080);
+app.listen(8081);

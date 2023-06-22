@@ -1,7 +1,7 @@
 import 'express-async-errors';
 import express from 'express';
 
-const items = [
+const tweets = [
     {
         id: '1',
         des: "Hello World",
@@ -18,15 +18,15 @@ const router = express.Router();
 // GET /items?username=:username
 router.get('/', (req, res, next) => {
     const username = req.query.username;
-    const data = username ? items.filter(item => item.username === username)
-    : items;
+    const data = username ? tweets.filter(item => item.username === username)
+    : tweets;
     res.status(200).json(data);
 })
 
-// GET /items/:id
+// GET /tweets/:id
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
-    const item = items.find((item) => item.id === id);
+    const item = tweets.find((item) => item.id === id);
     if (item) {
       res.status(200).json(item);
     } else {
@@ -44,7 +44,7 @@ router.post('/', (req, res, next) => {
       name,
       username,
     };
-    items = [tweet, ...tweets];
+    tweets = [tweet, ...tweets];
     res.status(201).json(tweet);
   });
 
@@ -52,7 +52,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     const id = req.params.id;
     const text = req.body.text;
-    const item = items.find((item) => item.id === id);
+    const item = tweets.find((item) => item.id === id);
     if (item) {
       item.text = text;
       res.status(200).json(item);
@@ -64,7 +64,7 @@ router.put('/:id', (req, res, next) => {
 // DELETE /items/:id
 router.delete('/:id', (req, res, next) => {
     const id = req.params.id;
-    items = items.filter((item) => item.id !== id);
+    tweets = tweets.filter((item) => item.id !== id);
     res.sendStatus(204);
   });
 
