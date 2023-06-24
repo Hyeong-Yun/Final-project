@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import 'express-async-errors';
-import itemsRoute from './router/items.js';
+import tweetRoute from './router/tweets.js';
 
 const app = express();
 app.use(express.json());
@@ -11,7 +11,7 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan('tiny'));
 
-app.use('/tweets', itemsRoute);
+app.use('/tweets', tweetRoute);
 
 // Not Found 전달
 app.use((req, res, next) => {
