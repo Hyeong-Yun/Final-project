@@ -1,52 +1,65 @@
-import * as tweetRepository from '../data/tweet.js';
+import * as userRepository from './auth.js';
 
-export async function getTweets(req, res) {
-  const username = req.query.username;
-  const data = await (username
-    ? tweetRepository.getAllByUsername(username)
-    : tweetRepository.getAll());
-  res.status(200).json(data);
+let tweets = [
+  {
+    id: '1',
+    text: 'Hello World',
+    createdAt: new Date().toString(),
+    userId: '1',
+  },
+  {
+    id: '2',
+    text: '안뇽!',
+    createdAt: new Date().toString(),
+    userId: '1',
+  },
+];
+
+export async function getAll() {
+  return Promise.all(
+    tweets.map(async (tweet) => {
+      const { username, name, url } = await userRepository.findById(
+        tweet.userId
+      );
+      return { ...tweet, username, name, url };
+    })
+  );
 }
 
-export async function getTweet(req, res, next) {
-  const id = req.params.id;
-  const tweet = await tweetRepository.getById(id);
+export async function getAllByUsername(username) {
+  return getAll().then((tweets) =>
+    tweets.filter((tweet) => tweet.username === username)
+  );
+}
+
+export async function getById(id) {
+  const found = tweets.find((tweet) => tweet.id === id);
+  if (!found) {
+    return null;
+  }
+  const { username, name, url } = await userRepository.findById(found.userId);
+  return { ...found, username, name, url };
+}
+
+export async function create(text, userId) {
+  const tweet = {
+    id: new Date().toString(),
+    text,
+    createdAt: new Date(),
+    userId,
+  };
+  tweets = [tweet, ...tweets];
+  return getById(tweet.id);
+}
+
+export async function update(id, text) {
+  const tweet = tweets.find((tweet) => tweet.id === id);
   if (tweet) {
-    res.status(200).json(tweet);
-  } else {
-    res.status(404).json({ message: `Tweet id(${id}) not found` });
+    tweet.text = text;
   }
+  return getById(tweet.id);
 }
 
-export async function createTweet(req, res, next) {
-  const { text } = req.body;
-  const tweet = await tweetRepository.create(text, req.userId);
-  res.status(201).json(tweet);
-}
-
-export async function updateTweet(req, res, next) {
-  const id = req.params.id;
-  const text = req.body.text;
-  const tweet = await tweetRepository.getById(id);
-  if (!tweet) {
-    return res.status(404).json({ message: `Tweet not found: ${id}` });
-  }
-  if (tweet.userId !== req.userId) {
-    return res.sendStatus(403);
-  }
-  const updated = await tweetRepository.update(id, text);
-  res.status(200).json(updated);
-}
-
-export async function deleteTweet(req, res, next) {
-  const id = req.params.id;
-  const tweet = await tweetRepository.getById(id);
-  if (!tweet) {
-    return res.status(404).json({ message: `Tweet not found: ${id}` });
-  }
-  if (tweet.userId !== req.userId) {
-    return res.sendStatus(403);
-  }
-  await tweetRepository.remove(id);
-  res.sendStatus(204);
+export async function remove(id) {
+  tweets = tweets.filter((tweet) => tweet.id !== id);
 }

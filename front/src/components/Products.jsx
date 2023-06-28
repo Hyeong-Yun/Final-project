@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useQuery from '@tanstack/react-query';
 import {getProducts} from '../api/firebase'
 import ProductCard from './ProductCard';
-import products from '../api/dummy';
+import {products} from '../api/dummy';
 
 export default function Products() {
   // const [products, setProducts] = useState();

@@ -10,6 +10,7 @@ import NewProduct from './pages/NewProduct';
 import MyCart from './pages/MyCart';
 import NotFound from './pages/NotFound';
 
+
 const router = createBrowserRouter([
   {
     path: '/',

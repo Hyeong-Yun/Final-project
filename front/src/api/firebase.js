@@ -63,7 +63,7 @@
 //   });
 // }
 
-import products from "./dummy"
+import {products} from "./dummy"
 
 
 export async function getProducts(){
