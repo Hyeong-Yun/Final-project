@@ -16,6 +16,7 @@ export default function Banner() {
         <DescriptionBox>
         </DescriptionBox>
       </BoxContainer>
+      
     ));
 
     const [currentIndex, setCurrentIndex] = useState();
